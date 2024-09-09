@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, OnInit  } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnChanges  } from '@angular/core';
 import {
   ApexChart,
   ChartComponent,
@@ -17,6 +17,11 @@ import {
 import { ApiService  } from '../../services/proxy.service';
 import { ResponseJsonSuc,ResponseJsonProd } from '../../interface/response-api';
 
+/**
+ * Componente del grafico total de artículos por sucursal
+*/
+
+//Interface necesaria para captura de gráficos
 export interface salesOverviewChart {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -32,20 +37,32 @@ export interface salesOverviewChart {
   marker: ApexMarkers;
 }
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   encapsulation: ViewEncapsulation.None,
 })
 
-export class AppDashboardComponent implements OnInit {
+export class AppDashboardComponent implements OnChanges {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
 
   public salesOverviewChart!: Partial<salesOverviewChart> | any;
   dataRequest? : ResponseJsonSuc;
   dataRequest2? : ResponseJsonProd;
 
+  //Cuando se crea una instancia de la directiva, este consulta a la API par obtner los datos.
+  ngOnChanges() {
+    this.apiService.getBranches()
+      .subscribe(data => {
+        this.dataRequest=data;
+        this.apiService.getArticles().subscribe(dataArt => {
+          this.dataRequest2=dataArt;
+          this.Onfinish();
+        });
+      }); 
+
+  }
+//Al terminar el llamado de la API realiza el llenado del salesOverviewChart para mostrar los gráficos.
   Onfinish() {
     var categoriesTemp = new Array();
     var categoriesCount = new Array();
@@ -144,16 +161,6 @@ export class AppDashboardComponent implements OnInit {
  
   }
 
-  ngOnInit() {
-    this.apiService.getBranches()
-      .subscribe(data => {
-        this.dataRequest=data;
-        this.apiService.getArticles().subscribe(dataArt => {
-          this.dataRequest2=dataArt;
-          this.Onfinish();
-        });
-      }); 
-
-  }
+  
   
 }

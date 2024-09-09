@@ -7,6 +7,10 @@ import { from } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 import * as _ from "lodash";
 
+/**
+ * Componente de la tabla de inventario de artículos activos
+*/
+
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -21,9 +25,10 @@ export class InventoryComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   
-
+//El constructor llama intreface Api
   constructor(private apiService:ApiService) {}
-  
+
+ //Un método que genera la tabla dinamica que se invoca inmediatamente después de que Angular haya completado la inicialización de la vista.
   ngAfterViewInit() {
     this.apiService.getArticles().subscribe(dataArt => {
       this.dataRequest=dataArt;
@@ -31,7 +36,7 @@ export class InventoryComponent implements AfterViewInit {
     });
     this.dataSource.paginator = this.paginator;
   }
-
+//Al terminar el llamado de la API realiza el llenado del dataSource para que se capture en la tabla.
   Onfinish() {
     if(this.dataRequest != null && this.dataRequest.Success){
       this.dataSource = new MatTableDataSource(this.dataRequest.Response);
@@ -44,7 +49,7 @@ export class InventoryComponent implements AfterViewInit {
         );
     }
   }
-
+//Si filtra con el Select de la vista este realiza el filtro en el dataSource de la tabla.
   applyFilter($event:any){
     if($event.value == "Todos"){
       this.dataSource= new MatTableDataSource(this.apiResponse);

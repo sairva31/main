@@ -5,6 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: './blank.component.html',
   styleUrls: [],
 })
+
+/**
+ * Componente de pantalla en blanco
+*/
 export class BlankComponent {
   constructor() {}
 }

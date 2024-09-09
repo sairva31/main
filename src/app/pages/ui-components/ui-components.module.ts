@@ -10,7 +10,7 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 
 import { UiComponentsRoutes } from './ui-components.routing';
 
-// ui components
+// ui componentes
 import { MatNativeDateModule } from '@angular/material/core';
 import { BranchesComponent } from './branches/branches.component';
 import { InventoryComponent } from './inventory/inventory.component';

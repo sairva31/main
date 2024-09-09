@@ -1,11 +1,14 @@
 <!-- ============================================================== -->
-<!-- Simple four boxes Row -->
+<!-- Tabla de informacion de Articulos -->
 <!-- ============================================================== -->
 
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="d-flex w-100">
       <mat-card-title>Inventario</mat-card-title>
+      <!-- ============================================================== -->
+      <!-- filtro de Tabla -->
+      <!-- ============================================================== -->
       <div class="m-l-auto">
         <mat-form-field class="theme-select" appearance="outline">
           <mat-select value="mar" (selectionChange)="applyFilter($event)">
@@ -18,7 +21,7 @@
     </div>
     <div class="table-responsive m-t-16">
       <table mat-table [dataSource]="dataSource!" class="w-100">
-        <!-- Position Column -->
+        <!-- Tabla de Datos -->
         <ng-container matColumnDef="Name">
           <th
             mat-header-cell
@@ -51,7 +54,7 @@
           </td>
         </ng-container>
 
-        <!-- Symbol Column -->
+        <!-- Conversion de Moneda -->
         <ng-container matColumnDef="Price">
           <th
             mat-header-cell
@@ -91,7 +94,7 @@
           </td>
         </ng-container>
 
-        <!-- Weight Column -->
+        <!-- Estilo de Alerta -->
         <ng-container matColumnDef="Store_name">
           <th
             mat-header-cell
@@ -115,6 +118,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+      <!-- Paginador de la Tabla -->
       <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                  showFirstLastButtons
                  aria-label="Productos por pantalla">

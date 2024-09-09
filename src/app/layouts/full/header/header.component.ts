@@ -7,12 +7,15 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-
+/**
+ * Componente de cabecera
+*/
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
 })
+
 export class HeaderComponent {
   @Input() showToggle = true;
   @Input() toggleChecked = false;

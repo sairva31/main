@@ -3,7 +3,12 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
- 
+
+/**
+ * Servicio Consulta APIRest,
+ * Permite obtener los datos de los servicios API
+*/
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
  
@@ -12,7 +17,7 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
  
- 
+  //Funcion de consulta API para obtner sucursales
   getBranches(): Observable<ResponseJsonSuc> {
     const headers = new HttpHeaders({
         'Content-Type': 'application/json',
@@ -21,6 +26,7 @@ export class ApiService {
     return this.http.get<ResponseJsonSuc>(this.baseURL + 'stores', { headers },)
   }
 
+  //Funcion de consulta API para obtner articulos
   getArticles(): Observable<ResponseJsonProd> {
     const headers = new HttpHeaders({
         'Content-Type': 'application/json',
@@ -29,6 +35,7 @@ export class ApiService {
     return this.http.get<ResponseJsonProd>(this.baseURL + 'articles', { headers },)
   }
 
+  //Funcion de consulta API para obtner articulos con el id de sucursales
   getArtByBranch(id: string): Observable<ResponseJsonProd> {
     const headers = new HttpHeaders({
         'Content-Type': 'application/json',

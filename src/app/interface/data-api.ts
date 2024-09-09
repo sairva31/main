@@ -1,3 +1,6 @@
+/**
+ * Modelo de datos los datos de articulos
+*/
 export interface ArticlesData {
     Id: string,
     Name: string,
@@ -9,6 +12,9 @@ export interface ArticlesData {
     Store_name: string
 }
 
+/**
+ * Modelo de datos los datos de sucursales
+*/
 export interface StoresData {
     Id: string,
     Name: string,
