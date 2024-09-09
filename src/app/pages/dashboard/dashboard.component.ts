@@ -13,10 +13,8 @@ import {
   ApexPlotOptions,
   ApexFill,
   ApexMarkers,
-  ApexResponsive,
 } from 'ng-apexcharts';
 import { ApiService  } from '../../services/proxy.service';
-import { StoresData, ArticlesData } from '../../interface/data-api';
 import { ResponseJsonSuc,ResponseJsonProd } from '../../interface/response-api';
 
 export interface salesOverviewChart {

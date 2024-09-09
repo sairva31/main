@@ -1,9 +1,27 @@
 <!-- ============================================================== -->
 <!-- Simple four boxes Row -->
 <!-- ============================================================== -->
+
 <mat-card class="cardWithShadow">
-    <mat-card-content>
-      <mat-card-title>Sample Braches</mat-card-title>
-      <mat-card-subtitle class="mat-body-1">This is test page</mat-card-subtitle>
+    <mat-card-content class="p-24">
+        <mat-card-title>Sucursales</mat-card-title>
     </mat-card-content>
   </mat-card>
+  <div class="row">
+    @for (dataRes of dataSource; track dataRes) {
+        <div class="col-sm-6 col-lg-4 ng-star-inserted">
+            <mat-card class="mat-mdc-card mdc-card cardWithShadow" style="height: 260px;">
+                <mat-card-content class="mat-mdc-card-content text-center p-24">
+                    <h4 mat-card-title="" class="mat-mdc-card-title card-title m-t-16 m-b-0"> {{dataRes.Name}} </h4>
+                </mat-card-content>
+                <mat-divider role="separator" class="mat-divider mat-divider-horizontal" aria-orientation="horizontal"></mat-divider>
+                <mat-card-content class="mat-mdc-card-content text-center p-24">
+                    <div class="m-t-20">
+                        <span class="f-s-14"> {{dataRes.Address}} </span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    }
+</div>
+  
