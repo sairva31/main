@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, OnChanges  } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnInit  } from '@angular/core';
 import {
   ApexChart,
   ChartComponent,
@@ -43,7 +43,7 @@ export interface salesOverviewChart {
   encapsulation: ViewEncapsulation.None,
 })
 
-export class AppDashboardComponent implements OnChanges {
+export class AppDashboardComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
 
   public salesOverviewChart!: Partial<salesOverviewChart> | any;
@@ -51,7 +51,7 @@ export class AppDashboardComponent implements OnChanges {
   dataRequest2? : ResponseJsonProd;
 
   //Cuando se crea una instancia de la directiva, este consulta a la API par obtner los datos.
-  ngOnChanges() {
+  ngOnInit() {
     this.apiService.getBranches()
       .subscribe(data => {
         this.dataRequest=data;
