@@ -1,8 +1,9 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { ApiService  } from '../../../services/proxy.service';
-import { ResponseJsonProd } from '../../../interface/response-api';
+import { ProxyGet  } from '../../../services/proxy.service';
+import { ResponseJson } from '../../../interface/response-api';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ArticlesData } from '../../../interface/data-api';
 import { from } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 import * as _ from "lodash";
@@ -18,7 +19,6 @@ import * as _ from "lodash";
 
 export class InventoryComponent implements AfterViewInit {
   displayedColumns: string[] = ['Name', 'Price', 'Total_in_shelf','Total_in_vault','Store_name'];
-  dataRequest? : ResponseJsonProd;
   dataSource:any;
   dataBranches:string[] = ["Todos"];
   apiResponse:any = [];
@@ -26,29 +26,25 @@ export class InventoryComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   
 //El constructor llama intreface Api
-  constructor(private apiService:ApiService) {}
+  constructor(private apiService:ProxyGet) {}
 
  //Un método que genera la tabla dinamica que se invoca inmediatamente después de que Angular haya completado la inicialización de la vista.
-  ngAfterViewInit() {
-    this.apiService.getArticles().subscribe(dataArt => {
-      this.dataRequest=dataArt;
-      this.Onfinish();
-    });
-    this.dataSource.paginator = this.paginator;
-  }
-//Al terminar el llamado de la API realiza el llenado del dataSource para que se capture en la tabla.
-  Onfinish() {
-    if(this.dataRequest != null && this.dataRequest.Success){
-      this.dataSource = new MatTableDataSource(this.dataRequest.Response);
-      this.apiResponse = this.dataRequest.Response;
-      from(this.dataRequest.Response)
+  async ngAfterViewInit() {
+    const jsonDta = await this.apiService.callAPI("articles", "GET");
+    const response = jsonDta as ResponseJson<ArticlesData>;
+    if (response && response.Success && response.Response) {
+      this.dataSource = new MatTableDataSource(response.Response);
+      this.apiResponse = response.Response;
+      from(response.Response)
         .pipe(distinct(e => e.Store_name)).subscribe(
           items => {
             this.dataBranches?.push(items.Store_name);
           }
         );
     }
+    this.dataSource.paginator = this.paginator;
   }
+
 //Si filtra con el Select de la vista este realiza el filtro en el dataSource de la tabla.
   applyFilter($event:any){
     if($event.value == "Todos"){

@@ -14,8 +14,9 @@ import {
   ApexFill,
   ApexMarkers,
 } from 'ng-apexcharts';
-import { ApiService  } from '../../services/proxy.service';
-import { ResponseJsonSuc,ResponseJsonProd } from '../../interface/response-api';
+import { ProxyGet  } from '../../services/proxy.service';
+import { ResponseJson } from '../../interface/response-api';
+import { StoresData, ArticlesData } from '../../interface/data-api';
 
 /**
  * Componente del grafico total de artículos por sucursal
@@ -47,19 +48,30 @@ export class AppDashboardComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
 
   public salesOverviewChart!: Partial<salesOverviewChart> | any;
-  dataRequest? : ResponseJsonSuc;
-  dataRequest2? : ResponseJsonProd;
+  dataRequest? : ResponseJson<StoresData>;
+  dataRequest2? : ResponseJson<ArticlesData>;
+
+  constructor(private apiService:ProxyGet) {}
 
   //Cuando se crea una instancia de la directiva, este consulta a la API par obtner los datos.
   ngOnInit() {
-    this.apiService.getBranches()
-      .subscribe(data => {
-        this.dataRequest=data;
-        this.apiService.getArticles().subscribe(dataArt => {
-          this.dataRequest2=dataArt;
-          this.Onfinish();
-        });
-      }); 
+    this.OnBeginer();
+  }
+
+  async OnBeginer(){
+    var jsonDta = await this.apiService.callAPI("stores", "GET");
+    const response = jsonDta as ResponseJson<StoresData>;
+    console.log(response);
+    if (response && response.Success && response.Response) {
+      this.dataRequest=response;
+      var jsonDtaArt = await this.apiService.callAPI("articles", "GET");
+      const responseArt = jsonDtaArt as ResponseJson<ArticlesData>;
+      console.log(responseArt);
+      if (responseArt && responseArt.Success && responseArt.Response) {  
+        this.dataRequest2= responseArt;
+        this.Onfinish();
+      }
+    }; 
 
   }
 //Al terminar el llamado de la API realiza el llenado del salesOverviewChart para mostrar los gráficos.
@@ -156,11 +168,6 @@ export class AppDashboardComponent implements OnInit {
       ],
     };
   }
-  
-  constructor(private apiService:ApiService) {
- 
-  }
-
   
   
 }
