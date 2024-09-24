@@ -12,7 +12,7 @@ import { TokensService } from '../services/tokens.service';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   public uri: string;
-  public dataJSon: string | null = null;
+  public dataJSon: any | null = null;
   public method: string;
   public invokeStatus: string | null = null;
   
@@ -41,10 +41,7 @@ export class ApiService {
         if (this.method === "GET") {
             response = await myClient.get(this.uri);
         } else {
-          response = await myClient.post(this.uri, { Args: {
-            "User": "sairva3@gmail.com",
-            "Password": "rmfTt2OTZ8ZiVTd"
-          }});
+          response = await myClient.post(this.uri, this.dataJSon);
         }
 
         responseFromServer = response.data;
@@ -89,7 +86,7 @@ export class ProxyGet {
 
             requestJSon2["Args"] = requestJSon;
 
-            this.setJson(JSON.stringify(requestJSon2));
+            this.setJson(requestJSon2);
             this.setWcfeCommerce1(new ApiService(
                 "https://localhost:44352/api/Token","POST"
             ));
@@ -126,7 +123,10 @@ export class ProxyGet {
 
     public async callAPIWithParams(service: string, method: string, param: Parameters): Promise<any> {
         if (!TokensService.Token || (TokensService.ExpiresToken && TokensService.ExpiresToken < new Date(Date.now() + 3600000))) {
-            await this.callTokenServices();
+          return this.callTokenServices().then(x  => {;
+            this.responseJSon = this.callAPIWithParams(service,method,param);
+            return this.responseJSon;
+          });
         }
         const requestJSon: Record<string, any> = {};
         try {
@@ -137,12 +137,13 @@ export class ProxyGet {
 
             requestJSon2["Args"] = requestJSon;
 
-            this.setJson(JSON.stringify(requestJSon2));
+            this.setJson(requestJSon2);
             this.setWcfeCommerce1(new ApiService(`https://localhost:44352/api/Services/${service}`,method));
             this.responseJSon = await this.getWcfeCommerce1()!.getJSonResponse(false, TokensService.Token ?? "");
+            return this.responseJSon;
         } catch (ex) {
             console.error("Application_Error: ProxyGet-Controller ", ex);
         }
-        return this.responseJSon;
+        
     }
 }
